@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.Componentes301.tiorico"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.Componentes301.tiorico"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -26,11 +26,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
-    // kotlinOptions fue ELIMINADO de aquí — se maneja abajo con tasks.withType
 }
 
-// ✅ CORRECCIÓN CLAVE: este bloque va FUERA de android { }, al nivel raíz del archivo
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -40,8 +37,9 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 dependencies {
     // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
 
     // AppCompat para InicioActivity y SalaEsperaActivity
@@ -58,6 +56,7 @@ dependencies {
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+
     // Core
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-ktx:1.9.0")
