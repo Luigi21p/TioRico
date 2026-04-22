@@ -34,7 +34,7 @@ fun AppNavigation() {
             val viewModel: GameViewModel = viewModel()
             GameScreen(
                 viewModel = viewModel,
-                onSalir = { navController.popBackStack() }
+                onExit = { navController.popBackStack() }
             )
         }
     }
