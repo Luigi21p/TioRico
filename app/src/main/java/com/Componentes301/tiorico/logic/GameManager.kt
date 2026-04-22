@@ -9,19 +9,19 @@ object GameManager {
     const val META = 5000
 
     private val eventosAleatorios = listOf(
-        EventoAleatorio("¡Encontraste dinero en la calle!", 200),
-        EventoAleatorio("Tu carro se dañó, gastos de taller.", -300),
-        EventoAleatorio("Recibiste un bono inesperado.", 400),
-        EventoAleatorio("Fuiste multado por exceso de velocidad.", -150),
-        EventoAleatorio("Ganaste un concurso local.", 500)
+        EventoAleatorio("You found money on the street!", 200),
+        EventoAleatorio("Your car broke down, repair costs.", -300),
+        EventoAleatorio("You received an unexpected bonus.", 400),
+        EventoAleatorio("You were fined for speeding.", -150),
+        EventoAleatorio("You won a local contest.", 500)
     )
 
-    // ── Acciones principales ──────────────────────────────────────
+    // ── Main actions ──────────────────────────────────────
 
     fun ahorrar(jugador: Jugador): String {
         val ganancia = 100
         jugador.dinero += ganancia
-        return "Ahorraste correctamente. +$$ganancia"
+        return "You saved money successfully. +$$ganancia"
     }
 
     fun invertir(jugador: Jugador): String {
@@ -29,21 +29,21 @@ object GameManager {
         return if (exito) {
             val ganancia = (200..600).random()
             jugador.dinero += ganancia
-            "¡Inversión exitosa! +$$ganancia"
+            "Successful investment! +$$ganancia"
         } else {
             val perdida = (100..400).random()
             jugador.dinero -= perdida
-            "Mala inversión. -$$perdida"
+            "Bad investment. -$$perdida"
         }
     }
 
     fun gastar(jugador: Jugador): String {
         val gasto = (150..350).random()
         jugador.dinero -= gasto
-        return "Gastaste $$gasto."
+        return "You spent $$gasto."
     }
 
-    // ── Evento aleatorio (ocurre -40% de los turnos) ──────────────
+    // ── Random event (occurs in 40% of turns) ──────────────
 
     fun verificarEventoAleatorio(jugador: Jugador): String? {
         val ocurre = (1..10).random() <= 4
@@ -51,10 +51,10 @@ object GameManager {
 
         val evento = eventosAleatorios.random()
         jugador.dinero += evento.impacto
-        return "🎲 Evento: ${evento.descripcion} (${if (evento.impacto > 0) "+" else ""}${evento.impacto})"
+        return "🎲 Event: ${evento.descripcion} (${if (evento.impacto > 0) "+" else ""}${evento.impacto})"
     }
 
-    // ── Verificaciones de estado ──────────────────────────────────
+    // ── State checks ──────────────────────────────────
 
     fun verificarVictoria(jugador: Jugador): Boolean {
         return jugador.dinero >= META
@@ -77,5 +77,4 @@ object GameManager {
         return Jugador(nombre = nombre, dinero = CAPITAL_INICIAL)
     }
 
-
-    }
+}

@@ -22,18 +22,18 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
 
-    // ── LEER LOS DATOS DEL INTENT ──
+    // ── READ DATA FROM THE INTENT ──
     val activity = context as? Activity
     val codigoSala = activity?.intent?.getStringExtra("codigoSala") ?: ""
     val nombreJugador = activity?.intent?.getStringExtra("nombreJugador") ?: ""
 
-    // Determinar a dónde ir primero
-    // Si codigoSala no está vacío, significa que venimos de la sala de espera
+    // Determine where to go first
+    // If codigoSala is not empty, it means we come from the waiting room
     val rutaInicial = if (codigoSala.isNotEmpty()) AppScreens.Game.route else AppScreens.Welcome.route
 
     NavHost(
         navController = navController,
-        startDestination = rutaInicial // ← Usamos la ruta calculada
+        startDestination = rutaInicial // ← We use the calculated route
     ) {
         composable(route = AppScreens.Welcome.route) {
             WelcomeScreen(
@@ -53,7 +53,7 @@ fun AppNavigation() {
             GameScreen(
                 viewModel = viewModel,
                 onExit = {
-                    // Si salimos de una partida online, mejor cerrar la actividad
+                    // If we exit an online match, it is better to close the activity
                     if (codigoSala.isNotEmpty()) {
                         activity?.finish()
                     } else {
