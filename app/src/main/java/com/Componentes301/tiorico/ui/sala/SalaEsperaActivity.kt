@@ -28,9 +28,9 @@ class SalaEsperaActivity : AppCompatActivity() {
         val tvJugadores = findViewById<TextView>(R.id.tvJugadores)
         val tvLista = findViewById<TextView>(R.id.tvListaJugadores)
 
-        tvCodigo.text = "Código: $codigoSala"
+        tvCodigo.text = "Code: $codigoSala"
 
-        // ── Escuchar cambios en tiempo real ─────────────────────
+        // ── Listen for real-time changes ─────────────────────
         salaListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val jugadores = snapshot.child("jugadores").children.toList()
@@ -39,10 +39,10 @@ class SalaEsperaActivity : AppCompatActivity() {
                     it.child("nombre").getValue(String::class.java)
                 }
 
-                tvJugadores.text = "Jugadores conectados: $cantidad/4"
+                tvJugadores.text = "Connected players: $cantidad/4"
                 tvLista.text = nombres.joinToString("\n")
 
-                // Cuando hay 4 jugadores, arranca el juego
+                // When there are 4 players, start the game
                 if (cantidad >= 4) {
                     irAlJuego()
                 }
@@ -56,18 +56,18 @@ class SalaEsperaActivity : AppCompatActivity() {
     }
 
     private fun irAlJuego() {
-        // Apuntamos a MainActivity porque es la que contiene el NavHost de Compose
+        // Navigate to MainActivity (it contains the Compose NavHost)
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("codigoSala", codigoSala)
         intent.putExtra("nombreJugador", nombreJugador)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Limpia el historial para no volver a la sala
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Clear back stack to avoid returning to the room
         startActivity(intent)
         finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Importante: remover el listener para no tener fugas de memoria
+        // Important: remove the listener to prevent memory leaks
         db.child("salas").child(codigoSala).removeEventListener(salaListener)
     }
 }

@@ -13,32 +13,32 @@ import com.Componentes301.tiorico.R
 
 class InicioActivity : AppCompatActivity() {
 
-    // Referencia a la base de datos de Firebase
+    // Firebase database reference
     private val db = Firebase.database.reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
 
-        // Configuración de la barra superior con botón de volver
+        // Top bar configuration with back button
         supportActionBar?.show()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Multijugador Online"
+        supportActionBar?.title = "Online Multiplayer"
 
         val etNombre = findViewById<EditText>(R.id.etNombre)
         val etCodigo = findViewById<EditText>(R.id.etCodigoSala)
         val btnCrear = findViewById<Button>(R.id.btnCrearSala)
         val btnUnirse = findViewById<Button>(R.id.btnUnirse)
 
-        // ── BOTÓN CREAR SALA ────────────────────────────────────
+        // ── CREATE ROOM BUTTON ────────────────────────────────────
         btnCrear.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             if (nombre.isEmpty()) {
-                Toast.makeText(this, "Por favor, escribe tu nombre", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Genera un código de 5 letras aleatorio (ej: ABCDE)
+            // Generate a random 5-letter code (e.g., ABCDE)
             val codigo = (1..5)
                 .map { ('A'..'Z').random() }
                 .joinToString("")
@@ -46,13 +46,13 @@ class InicioActivity : AppCompatActivity() {
             crearSala(codigo, nombre)
         }
 
-        // ── BOTÓN UNIRSE A SALA ─────────────────────────────────
+        // ── JOIN ROOM BUTTON ─────────────────────────────────
         btnUnirse.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             val codigo = etCodigo.text.toString().trim().uppercase()
 
             if (nombre.isEmpty() || codigo.isEmpty()) {
-                Toast.makeText(this, "Completa nombre y código de sala", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Enter name and room code", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -67,16 +67,16 @@ class InicioActivity : AppCompatActivity() {
             "listo" to false
         )
 
-        // Intentamos guardar en: salas -> [CÓDIGO] -> jugadores -> [NOMBRE]
+        // Try to save in: rooms -> [CODE] -> players -> [NAME]
         db.child("salas").child(codigo).child("jugadores").child(nombre)
             .setValue(jugador)
             .addOnSuccessListener {
-                Log.d("Firebase_TioRico", "Sala creada con éxito: $codigo")
+                Log.d("Firebase_TioRico", "Room created successfully: $codigo")
                 irASalaEspera(codigo, nombre)
             }
             .addOnFailureListener { e ->
-                Log.e("Firebase_TioRico", "Error al crear sala", e)
-                Toast.makeText(this, "Error de Firebase: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("Firebase_TioRico", "Error creating room", e)
+                Toast.makeText(this, "Firebase error: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -84,13 +84,13 @@ class InicioActivity : AppCompatActivity() {
         db.child("salas").child(codigo).get()
             .addOnSuccessListener { snapshot ->
                 if (!snapshot.exists()) {
-                    Toast.makeText(this, "La sala $codigo no existe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Room $codigo does not exist", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
 
                 val jugadoresActuales = snapshot.child("jugadores").childrenCount
                 if (jugadoresActuales >= 4) {
-                    Toast.makeText(this, "La sala está llena (Máx 4)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Room is full (Max 4)", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
 
@@ -103,13 +103,13 @@ class InicioActivity : AppCompatActivity() {
                 db.child("salas").child(codigo).child("jugadores").child(nombre)
                     .setValue(jugador)
                     .addOnSuccessListener {
-                        Log.d("Firebase_TioRico", "Unido a la sala: $codigo")
+                        Log.d("Firebase_TioRico", "Joined room: $codigo")
                         irASalaEspera(codigo, nombre)
                     }
             }
             .addOnFailureListener { e ->
-                Log.e("Firebase_TioRico", "Error al unirse", e)
-                Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show()
+                Log.e("Firebase_TioRico", "Error joining room", e)
+                Toast.makeText(this, "Connection error", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -119,10 +119,10 @@ class InicioActivity : AppCompatActivity() {
             putExtra("nombreJugador", nombre)
         }
         startActivity(intent)
-        // No ponemos finish() aquí por si el usuario quiere volver atrás desde la sala
+        // We don't call finish() in case the user wants to go back
     }
 
-    // Lógica para que el botón de "atrás" de la barra superior funcione
+    // Logic for the top bar back button
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
