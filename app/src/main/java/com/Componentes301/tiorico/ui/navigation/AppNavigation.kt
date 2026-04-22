@@ -1,6 +1,9 @@
 package com.Componentes301.tiorico.ui.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,24 +20,46 @@ sealed class AppScreens(val route: String) {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+
+    // ── LEER LOS DATOS DEL INTENT ──
+    val activity = context as? Activity
+    val codigoSala = activity?.intent?.getStringExtra("codigoSala") ?: ""
+    val nombreJugador = activity?.intent?.getStringExtra("nombreJugador") ?: ""
+
+    // Determinar a dónde ir primero
+    // Si codigoSala no está vacío, significa que venimos de la sala de espera
+    val rutaInicial = if (codigoSala.isNotEmpty()) AppScreens.Game.route else AppScreens.Welcome.route
 
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Welcome.route
+        startDestination = rutaInicial // ← Usamos la ruta calculada
     ) {
         composable(route = AppScreens.Welcome.route) {
             WelcomeScreen(
-                onStartLocalGame = {
-                    navController.navigate(AppScreens.Game.route)
-                }
+                onStartLocalGame = { navController.navigate(AppScreens.Game.route) }
             )
         }
 
         composable(route = AppScreens.Game.route) {
             val viewModel: GameViewModel = viewModel()
+
+            LaunchedEffect(Unit) {
+                if (codigoSala.isNotEmpty()) {
+                    viewModel.conectarAFirebase(codigoSala, nombreJugador)
+                }
+            }
+
             GameScreen(
                 viewModel = viewModel,
-                onExit = { navController.popBackStack() }
+                onExit = {
+                    // Si salimos de una partida online, mejor cerrar la actividad
+                    if (codigoSala.isNotEmpty()) {
+                        activity?.finish()
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
     }

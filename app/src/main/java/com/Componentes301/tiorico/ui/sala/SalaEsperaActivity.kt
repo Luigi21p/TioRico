@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.Componentes301.tiorico.MainActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -55,10 +56,11 @@ class SalaEsperaActivity : AppCompatActivity() {
     }
 
     private fun irAlJuego() {
-        // La Persona 3 crea JuegoActivity, por ahora dejamos el Intent listo
-        val intent = Intent(this, Class.forName("com.Componentes301.tiorico.ui.game.JuegoActivity"))
+        // Apuntamos a MainActivity porque es la que contiene el NavHost de Compose
+        val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("codigoSala", codigoSala)
         intent.putExtra("nombreJugador", nombreJugador)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) // Limpia el historial para no volver a la sala
         startActivity(intent)
         finish()
     }
