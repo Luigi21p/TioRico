@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TioRico">
 
-        <!-- MainActivity es la pantalla principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,9 +23,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Pantallas del compañero (modo online) -->
-        <activity android:name=".ui.sala.InicioActivity" />
-        <activity android:name=".ui.sala.SalaEsperaActivity" />
+        <activity
+            android:name="com.Componentes301.tiorico.ui.sala.InicioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.Componentes301.tiorico.ui.sala.SalaEsperaActivity"
+            android:exported="false" />
 
     </application>
 
