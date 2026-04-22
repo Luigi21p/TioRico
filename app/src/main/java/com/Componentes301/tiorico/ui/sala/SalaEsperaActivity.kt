@@ -1,4 +1,4 @@
-package com.tugrupo.tiorico.ui.sala
+package com.Componentes301.tiorico.ui.sala
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.tugrupo.tiorico.R
+import com.Componentes301.tiorico.R
 
 class SalaEsperaActivity : AppCompatActivity() {
 
@@ -56,7 +56,7 @@ class SalaEsperaActivity : AppCompatActivity() {
 
     private fun irAlJuego() {
         // La Persona 3 crea JuegoActivity, por ahora dejamos el Intent listo
-        val intent = Intent(this, Class.forName("com.tugrupo.tiorico.ui.game.JuegoActivity"))
+        val intent = Intent(this, Class.forName("com.Componentes301.tiorico.ui.game.JuegoActivity"))
         intent.putExtra("codigoSala", codigoSala)
         intent.putExtra("nombreJugador", nombreJugador)
         startActivity(intent)

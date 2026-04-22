@@ -1,15 +1,18 @@
 package com.Componentes301.tiorico.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.Componentes301.tiorico.Utils.Constantes
+import com.Componentes301.tiorico.ui.sala.InicioActivity
 
 @Composable
 fun WelcomeScreen(onStartLocalGame: () -> Unit) {
@@ -50,14 +53,16 @@ fun WelcomeScreen(onStartLocalGame: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        val context = LocalContext.current
         // Botón Online deshabilitado hasta merge con rama del compañero
         OutlinedButton(
-            onClick = { /* TODO: conectar InicioActivity tras el merge */ },
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            enabled = false
+            onClick = {
+                val intent = Intent(context, InicioActivity::class.java)
+                context.startActivity(intent)
+            },
+            modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
-            Text("JUGAR ONLINE (próximamente)")
+            Text("JUGAR ONLINE")
         }
     }
 }

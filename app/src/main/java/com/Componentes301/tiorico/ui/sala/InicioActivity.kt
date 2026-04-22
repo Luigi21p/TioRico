@@ -1,4 +1,4 @@
-package com.tugrupo.tiorico.ui.sala
+package com.Componentes301.tiorico.ui.sala
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.tugrupo.tiorico.R
+import com.Componentes301.tiorico.R
 
 class InicioActivity : AppCompatActivity() {
 
@@ -17,6 +17,8 @@ class InicioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
+        supportActionBar?.show()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val etNombre = findViewById<EditText>(R.id.etNombre)
         val etCodigo = findViewById<EditText>(R.id.etCodigoSala)
@@ -106,5 +108,9 @@ class InicioActivity : AppCompatActivity() {
         intent.putExtra("codigoSala", codigo)
         intent.putExtra("nombreJugador", nombre)
         startActivity(intent)
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

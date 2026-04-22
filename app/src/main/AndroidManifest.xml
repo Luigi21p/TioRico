@@ -14,8 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TioRico">
 
+        <!-- MainActivity es la pantalla principal -->
         <activity
-            android:name=".ui.sala.InicioActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +24,8 @@
             </intent-filter>
         </activity>
 
+        <!-- Pantallas del compañero (modo online) -->
+        <activity android:name=".ui.sala.InicioActivity" />
         <activity android:name=".ui.sala.SalaEsperaActivity" />
 
     </application>
